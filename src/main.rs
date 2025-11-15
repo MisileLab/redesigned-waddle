@@ -124,9 +124,14 @@ fn compile_file(path: &PathBuf, output: Option<PathBuf>, backend: &str) -> lumen
             let mut codegen = lumen::codegen::CudaCodegen::new();
             (codegen.generate(&mir_program)?, "cu")
         }
+        "rocm" | "hip" => {
+            println!("🔥 Generating ROCm/HIP code (AMD GPUs)...");
+            let mut codegen = lumen::codegen::RocmCodegen::new();
+            (codegen.generate(&mir_program)?, "cpp")
+        }
         _ => {
             return Err(lumen::LumenError::CodegenError {
-                message: format!("Unknown backend: {}. Use pytorch, triton, or cuda", backend),
+                message: format!("Unknown backend: {}. Use pytorch, triton, cuda, or rocm", backend),
             });
         }
     };
