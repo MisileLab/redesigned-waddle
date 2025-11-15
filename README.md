@@ -85,20 +85,31 @@ python mlp.py
 
 ## 🌟 Features
 
-### Current (v0.1)
+### Current (v0.4) - **Working Compiler!** 🎉
 
 - ✅ **Parser**: Full syntax parsing with pest
 - ✅ **AST**: Complete abstract syntax tree representation
-- ✅ **CLI**: Command-line interface for parsing
+- ✅ **CLI**: Command-line interface (`lumenc compile`)
+- ✅ **Symbol Table**: Name resolution with scopes
+- ✅ **Type Checking**: Static type and shape inference
+- ✅ **IR Pipeline**: Multi-level IR (HIR → MIR)
+- ✅ **PyTorch Backend**: Full code generation to executable Python
+- ✅ **Built-in Operations**: matmul, relu, sigmoid, tanh, etc.
 
-### In Progress (v0.2-0.4)
+**You can now compile Lumen code to PyTorch!**
 
-- 🔨 **Type Checking**: Static type and shape inference
-- 🔨 **IR**: Multi-level intermediate representation (HIR, MIR, LIR)
-- 🔨 **Code Generation**: PyTorch backend
-- 🔨 **Automatic Differentiation**: Reverse-mode AD
+```bash
+lumenc compile examples/standalone.lumen
+# Generates executable PyTorch code in examples/standalone.py
+```
 
-### Planned (v0.5+)
+### In Progress (v0.5-0.6)
+
+- 🔨 **Model Classes**: Full support for model definitions
+- 🔨 **Training Loops**: Native training DSL
+- 🔨 **Automatic Differentiation**: Reverse-mode AD with gradient computation
+
+### Planned (v0.7+)
 
 - 📋 **Optimization**: Operator fusion, memory planning, CSE/DCE
 - 📋 **LLVM Backend**: Native code generation
