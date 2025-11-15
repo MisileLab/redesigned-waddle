@@ -1,0 +1,20 @@
+// Simple Lumen example
+
+dim batch
+dim features = 784
+dim hidden = 256
+dim classes = 10
+
+model SimpleMLP {
+  param W1: Tensor[f32, features, hidden] ~ xavier()
+  param b1: Tensor[f32, hidden] ~ zeros()
+
+  param W2: Tensor[f32, hidden, classes] ~ xavier()
+  param b2: Tensor[f32, classes] ~ zeros()
+
+  fn forward(x: Tensor[f32, batch, features]) -> Tensor[f32, batch, classes] {
+    let h = relu(x)
+    let out = matmul(h, W2)
+    return out
+  }
+}

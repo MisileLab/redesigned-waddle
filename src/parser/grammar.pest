@@ -1,0 +1,189 @@
+// Lumen Grammar (pest PEG)
+
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
+COMMENT = _{ "//" ~ (!"\n" ~ ANY)* }
+
+// Keywords
+KW_DIM = { "dim" }
+KW_MODEL = { "model" }
+KW_PARAM = { "param" }
+KW_FN = { "fn" }
+KW_LET = { "let" }
+KW_RETURN = { "return" }
+KW_TRUE = { "true" }
+KW_FALSE = { "false" }
+
+// Identifiers
+ident = @{ !keyword ~ (ASCII_ALPHA | "_") ~ (ASCII_ALPHANUMERIC | "_")* }
+
+keyword = _{
+    KW_DIM | KW_MODEL | KW_PARAM | KW_FN | KW_LET | KW_RETURN |
+    KW_TRUE | KW_FALSE | "Tensor" | "i32" | "i64" | "f32" | "f64" | "bool" |
+    "zeros" | "ones" | "xavier" | "kaiming" | "normal" | "uniform"
+}
+
+// Literals
+int_literal = @{ "-"? ~ ASCII_DIGIT+ }
+float_literal = @{
+    "-"? ~ ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT+ ~ (^"e" ~ ("+" | "-")? ~ ASCII_DIGIT+)?
+}
+bool_literal = { KW_TRUE | KW_FALSE }
+
+// Types
+primitive_type = {
+    "i32" | "i64" | "f32" | "f64" | "bool"
+}
+
+dim_expr = {
+    dim_term ~ ((add_op | sub_op) ~ dim_term)*
+}
+
+dim_term = {
+    dim_factor ~ ((mul_op | div_op) ~ dim_factor)*
+}
+
+dim_factor = {
+    int_literal | ident | "(" ~ dim_expr ~ ")"
+}
+
+tensor_type = {
+    "Tensor" ~ "[" ~ primitive_type ~ ("," ~ dim_expr)* ~ "]"
+}
+
+type_expr = {
+    tensor_type | primitive_type | ident
+}
+
+// Initializers
+initializer = {
+    "zeros" ~ "(" ~ ")" |
+    "ones" ~ "(" ~ ")" |
+    "xavier" ~ "(" ~ ")" |
+    "kaiming" ~ "(" ~ ")" |
+    "normal" ~ "(" ~ float_literal ~ "," ~ float_literal ~ ")" |
+    "uniform" ~ "(" ~ float_literal ~ "," ~ float_literal ~ ")"
+}
+
+// Declarations
+dim_decl = {
+    KW_DIM ~ ident ~ ("=" ~ int_literal)?
+}
+
+param_decl = {
+    KW_PARAM ~ ident ~ ":" ~ type_expr ~ "~" ~ initializer
+}
+
+param = {
+    ident ~ ":" ~ type_expr
+}
+
+param_list = {
+    param ~ ("," ~ param)*
+}
+
+function_decl = {
+    KW_FN ~ ident ~ "(" ~ param_list? ~ ")" ~ ("->" ~ type_expr)? ~ block
+}
+
+model_member = {
+    param_decl | function_decl
+}
+
+model_decl = {
+    KW_MODEL ~ ident ~ "{" ~ model_member* ~ "}"
+}
+
+declaration = {
+    dim_decl | model_decl | function_decl
+}
+
+// Statements
+let_stmt = {
+    KW_LET ~ ident ~ (":" ~ type_expr)? ~ "=" ~ expr
+}
+
+return_stmt = {
+    KW_RETURN ~ expr?
+}
+
+expr_stmt = {
+    expr
+}
+
+stmt = {
+    let_stmt | return_stmt | expr_stmt
+}
+
+block = {
+    "{" ~ stmt* ~ "}"
+}
+
+// Expressions
+primary_expr = {
+    float_literal |
+    int_literal |
+    bool_literal |
+    ident |
+    "(" ~ expr ~ ")"
+}
+
+postfix_expr = {
+    primary_expr ~ (
+        "." ~ ident |
+        "(" ~ arg_list? ~ ")"
+    )*
+}
+
+arg_list = {
+    expr ~ ("," ~ expr)*
+}
+
+unary_expr = {
+    (neg_op | not_op)* ~ postfix_expr
+}
+
+mul_expr = {
+    unary_expr ~ ((mul_op | div_op | mod_op) ~ unary_expr)*
+}
+
+add_expr = {
+    mul_expr ~ ((add_op | sub_op) ~ mul_expr)*
+}
+
+cmp_expr = {
+    add_expr ~ ((eq_op | ne_op | lt_op | le_op | gt_op | ge_op) ~ add_expr)*
+}
+
+and_expr = {
+    cmp_expr ~ (and_op ~ cmp_expr)*
+}
+
+or_expr = {
+    and_expr ~ (or_op ~ and_expr)*
+}
+
+expr = {
+    or_expr
+}
+
+// Operators
+add_op = { "+" }
+sub_op = { "-" }
+mul_op = { "*" }
+div_op = { "/" }
+mod_op = { "%" }
+neg_op = { "-" }
+not_op = { "!" }
+eq_op = { "==" }
+ne_op = { "!=" }
+lt_op = { "<" }
+le_op = { "<=" }
+gt_op = { ">" }
+ge_op = { ">=" }
+and_op = { "and" }
+or_op = { "or" }
+
+// Program
+program = {
+    SOI ~ declaration* ~ EOI
+}

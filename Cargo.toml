@@ -1,0 +1,22 @@
+[package]
+name = "lumen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pest = "2.7"
+pest_derive = "2.7"
+thiserror = "1.0"
+anyhow = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bin]]
+name = "lumenc"
+path = "src/main.rs"
+
+[lib]
+name = "lumen"
+path = "src/lib.rs"
