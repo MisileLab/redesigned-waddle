@@ -1,0 +1,12 @@
+// Standalone function test
+
+dim batch
+dim features = 10
+dim hidden = 5
+
+fn simple_forward(x: Tensor[f32, batch, features],
+                  W: Tensor[f32, features, hidden]) -> Tensor[f32, batch, hidden] {
+  let z = matmul(x, W)
+  let a = relu(z)
+  return a
+}

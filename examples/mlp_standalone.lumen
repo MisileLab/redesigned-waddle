@@ -1,0 +1,17 @@
+// MLP as standalone functions
+
+dim batch
+dim features = 784
+dim hidden = 256
+dim classes = 10
+
+fn mlp_forward(x: Tensor[f32, batch, features],
+               W1: Tensor[f32, features, hidden],
+               b1: Tensor[f32, hidden],
+               W2: Tensor[f32, hidden, classes],
+               b2: Tensor[f32, classes]) -> Tensor[f32, batch, classes] {
+  let h1 = matmul(x, W1)
+  let h2 = relu(h1)
+  let out1 = matmul(h2, W2)
+  return out1
+}

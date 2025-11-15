@@ -1,0 +1,15 @@
+// Very simple test
+
+dim batch
+dim features = 10
+dim hidden = 5
+
+model SimpleModel {
+  param W: Tensor[f32, features, hidden] ~ xavier()
+  param b: Tensor[f32, hidden] ~ zeros()
+
+  fn forward(x: Tensor[f32, batch, features]) -> Tensor[f32, batch, hidden] {
+    let z = matmul(x, W)
+    return z
+  }
+}
