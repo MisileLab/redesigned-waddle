@@ -29,6 +29,10 @@ enum Commands {
         /// Output file path
         #[arg(short, long, value_name = "FILE")]
         output: Option<PathBuf>,
+
+        /// Backend to use (pytorch, triton, cuda)
+        #[arg(short, long, default_value = "pytorch")]
+        backend: String,
     },
 }
 
@@ -46,8 +50,8 @@ fn main() {
                 }
             }
         }
-        Commands::Compile { input, output } => {
-            let result = compile_file(&input, output);
+        Commands::Compile { input, output, backend } => {
+            let result = compile_file(&input, output, &backend);
             match result {
                 Ok(()) => println!("✓ Compilation successful"),
                 Err(e) => {
@@ -75,7 +79,7 @@ fn parse_file(path: &PathBuf) -> lumen::Result<()> {
     Ok(())
 }
 
-fn compile_file(path: &PathBuf, output: Option<PathBuf>) -> lumen::Result<()> {
+fn compile_file(path: &PathBuf, output: Option<PathBuf>, backend: &str) -> lumen::Result<()> {
     println!("🔍 Reading source file...");
     let source = fs::read_to_string(path)
         .map_err(|e| lumen::LumenError::ParseError {
@@ -103,24 +107,45 @@ fn compile_file(path: &PathBuf, output: Option<PathBuf>) -> lumen::Result<()> {
     let mir_lowering = lumen::mir::MirLowering::new();
     let mir_program = mir_lowering.lower(&hir_program)?;
 
-    println!("🐍 Generating PyTorch code...");
-    let mut codegen = lumen::codegen::PyTorchCodegen::new();
-    let python_code = codegen.generate(&mir_program)?;
+    // Generate code based on selected backend
+    let (generated_code, default_extension) = match backend.to_lowercase().as_str() {
+        "pytorch" => {
+            println!("🐍 Generating PyTorch code...");
+            let mut codegen = lumen::codegen::PyTorchCodegen::new();
+            (codegen.generate(&mir_program)?, "py")
+        }
+        "triton" => {
+            println!("⚡ Generating Triton GPU kernels...");
+            let mut codegen = lumen::codegen::TritonCodegen::new();
+            (codegen.generate(&mir_program)?, "py")
+        }
+        "cuda" => {
+            println!("🚀 Generating CUDA C++ code...");
+            let mut codegen = lumen::codegen::CudaCodegen::new();
+            (codegen.generate(&mir_program)?, "cu")
+        }
+        _ => {
+            return Err(lumen::LumenError::CodegenError {
+                message: format!("Unknown backend: {}. Use pytorch, triton, or cuda", backend),
+            });
+        }
+    };
 
     // Write output
     let output_path = output.unwrap_or_else(|| {
         let mut p = path.clone();
-        p.set_extension("py");
+        p.set_extension(default_extension);
         p
     });
 
     println!("💾 Writing to {:?}...", output_path);
-    fs::write(&output_path, python_code)
+    fs::write(&output_path, generated_code)
         .map_err(|e| lumen::LumenError::CodegenError {
             message: format!("Failed to write output: {}", e),
         })?;
 
     println!("✅ Compilation successful!");
+    println!("   Backend: {}", backend);
     println!("   Output: {:?}", output_path);
 
     Ok(())

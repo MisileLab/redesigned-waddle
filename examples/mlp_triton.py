@@ -125,8 +125,9 @@ def triton_tanh(x):
     return output
 
 
-def simple_forward(x, W):
-    z = triton_matmul(x, W)
-    a = triton_relu(z)
-    return a
+def mlp_forward(x, W1, b1, W2, b2):
+    h1 = triton_matmul(x, W1)
+    h2 = triton_relu(h1)
+    out1 = triton_matmul(h2, W2)
+    return out1
 
