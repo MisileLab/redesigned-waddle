@@ -8,7 +8,6 @@ use std::fmt::Write;
 pub struct RocmCodegen {
     output: String,
     indent_level: usize,
-    _kernel_counter: usize,
 }
 
 impl RocmCodegen {
@@ -16,7 +15,6 @@ impl RocmCodegen {
         Self {
             output: String::new(),
             indent_level: 0,
-            _kernel_counter: 0,
         }
     }
 

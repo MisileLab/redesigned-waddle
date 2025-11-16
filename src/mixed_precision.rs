@@ -125,7 +125,6 @@ pub struct MixedPrecisionOptimizer {
     config: AMPConfig,
     loss_scale: f32,
     growth_tracker: usize,
-    _master_params: HashMap<String, String>,  // param_name -> master_copy_name
 }
 
 impl MixedPrecisionOptimizer {
@@ -134,7 +133,6 @@ impl MixedPrecisionOptimizer {
             loss_scale: config.init_scale,
             config,
             growth_tracker: 0,
-            _master_params: HashMap::new(),
         }
     }
 
@@ -275,12 +273,12 @@ impl PrecisionAnalyzer {
 
 /// Cast insertion pass - adds explicit casts between precisions
 pub struct CastInsertion {
-    _casts: Vec<(String, Precision, Precision)>,  // (var, from, to)
+    // Future: track inserted casts for optimization
 }
 
 impl CastInsertion {
     pub fn new() -> Self {
-        Self { _casts: Vec::new() }
+        Self {}
     }
 
     /// Insert casts where precision changes

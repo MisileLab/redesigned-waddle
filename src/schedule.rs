@@ -96,8 +96,7 @@ impl Schedule {
 
 /// Auto-scheduler that searches for optimal schedules
 pub struct AutoScheduler {
-    _search_iterations: usize,
-    _cost_model: CostModel,
+    // Future: search_iterations, cost_model for ML-based scheduling
 }
 
 #[derive(Debug, Clone)]
@@ -151,10 +150,7 @@ impl CostModel {
 
 impl AutoScheduler {
     pub fn new() -> Self {
-        Self {
-            _search_iterations: 100,
-            _cost_model: CostModel::new(),
-        }
+        Self {}
     }
 
     pub fn search(&self, program: &MirProgram) -> Result<Vec<Schedule>> {
