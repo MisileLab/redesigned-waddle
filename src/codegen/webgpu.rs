@@ -275,11 +275,12 @@ mod tests {
     #[test]
     fn test_webgpu_codegen_basic() {
         let mut codegen = WebGPUCodegen::new();
-        let program = MirProgram { models: vec![], 
+        let program = MirProgram {
+            models: vec![],
             functions: vec![MirFunction {
                 name: "forward".to_string(),
                 params: vec![],
-                return_type: "void".to_string(),
+                return_type: None,
                 body: vec![],
             }],
         };

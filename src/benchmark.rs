@@ -174,48 +174,52 @@ pub struct StandardBenchmarks;
 
 impl StandardBenchmarks {
     /// ResNet-50 benchmark
-    pub fn resnet50() -> MirProgram { models: vec![], 
-        MirProgram { models: vec![], 
+    pub fn resnet50() -> MirProgram {
+        MirProgram {
+            models: vec![],
             functions: vec![MirFunction {
                 name: "resnet50".to_string(),
                 params: vec![],
-                return_type: "void".to_string(),
+                return_type: None,
                 body: vec![],
             }],
         }
     }
 
     /// GPT-2 benchmark
-    pub fn gpt2() -> MirProgram { models: vec![], 
-        MirProgram { models: vec![], 
+    pub fn gpt2() -> MirProgram {
+        MirProgram {
+            models: vec![],
             functions: vec![MirFunction {
                 name: "gpt2".to_string(),
                 params: vec![],
-                return_type: "void".to_string(),
+                return_type: None,
                 body: vec![],
             }],
         }
     }
 
     /// BERT benchmark
-    pub fn bert() -> MirProgram { models: vec![], 
-        MirProgram { models: vec![], 
+    pub fn bert() -> MirProgram {
+        MirProgram {
+            models: vec![],
             functions: vec![MirFunction {
                 name: "bert".to_string(),
                 params: vec![],
-                return_type: "void".to_string(),
+                return_type: None,
                 body: vec![],
             }],
         }
     }
 
     /// Matrix multiplication benchmark
-    pub fn matmul(m: usize, n: usize, k: usize) -> MirProgram { models: vec![], 
-        MirProgram { models: vec![], 
+    pub fn matmul(m: usize, n: usize, k: usize) -> MirProgram {
+        MirProgram {
+            models: vec![],
             functions: vec![MirFunction {
                 name: format!("matmul_{}x{}x{}", m, n, k),
                 params: vec![],
-                return_type: "void".to_string(),
+                return_type: None,
                 body: vec![
                     MirStmt::Assign {
                         name: "result".to_string(),

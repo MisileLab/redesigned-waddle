@@ -6,7 +6,7 @@ use crate::error::Result;
 /// MIR is a simplified computation graph representation
 /// For now, we keep it close to HIR and focus on code generation
 #[derive(Debug, Clone)]
-pub struct MirProgram { models: vec![], 
+pub struct MirProgram {
     pub models: Vec<MirModel>,
     pub functions: Vec<MirFunction>,
 }

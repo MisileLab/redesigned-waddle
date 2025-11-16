@@ -2,6 +2,7 @@
 // Performance analysis and visualization
 
 use crate::mir::*;
+use crate::error::Result;
 use std::collections::HashMap;
 use std::time::Duration;
 

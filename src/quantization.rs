@@ -284,7 +284,7 @@ impl PostTrainingQuant {
                         MirExpr::Call { func, .. } => {
                             if func == "matmul" && self.config.quantize_weights {
                                 // Replace with quantized version
-                                *var_type = "int8".to_string();
+                                // Note: MIR doesn't have var_type, so quantization happens at codegen
                             }
                         }
                         _ => {}

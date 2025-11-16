@@ -209,7 +209,7 @@ def flash_attention(q, k, v, causal=False):
             # ... (simplified for brevity)
 
     return output
-"#, num_heads, head_dim)
+"#)
     }
 
     /// Generate code for Rotary Position Embedding (RoPE)
@@ -247,7 +247,7 @@ def precompute_freqs_rope(dim, max_position, base=10000.0):
     t = torch.arange(max_position).float()
     freqs = torch.outer(t, inv_freq)
     return freqs
-"#, dim, max_position)
+"#)
     }
 
     /// Generate code for Group Normalization
@@ -326,8 +326,8 @@ def gelu_exact(x):
             AdvancedOp::RotaryEmbedding { dim, max_position } => {
                 Self::rope(*dim, *max_position)
             }
-            AdvancedOp::GroupNorm { num_groups, num_channels, eps } => {
-                Self::group_norm(*num_groups, *num_channels, *eps)
+            AdvancedOp::GroupNorm { num_groups, _num_channels, eps } => {
+                Self::group_norm(*num_groups, *_num_channels, *eps)
             }
             AdvancedOp::GELU { approximate } => {
                 Self::gelu(*approximate)

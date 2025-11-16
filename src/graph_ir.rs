@@ -78,7 +78,7 @@ impl Graph {
         for func in &mir.functions {
             for stmt in &func.body {
                 if let MirStmt::Assign { name, value, .. } = stmt {
-                    let node_id = Self::expr_to_graph(&mut graph, value, &var_to_node, var_type)?;
+                    let node_id = Self::expr_to_graph(&mut graph, value, &var_to_node, "f32")?;
                     var_to_node.insert(name.clone(), node_id);
                 }
             }
@@ -281,11 +281,12 @@ impl Graph {
             });
         }
 
-        Ok(MirProgram { models: vec![], 
+        Ok(MirProgram {
+            models: vec![],
             functions: vec![MirFunction {
                 name: "optimized".to_string(),
                 params: vec![],
-                return_type: "void".to_string(),
+                return_type: None,
                 body: stmts,
             }],
         })

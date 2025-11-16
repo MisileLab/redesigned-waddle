@@ -1,7 +1,7 @@
 // Dynamic Shapes Support
 // Allows symbolic dimensions like `dim batch = ?`
 
-use crate::error::{Result};
+use crate::error::{Result, LumenError};
 use std::collections::HashMap;
 
 /// Symbolic dimension

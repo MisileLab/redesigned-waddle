@@ -119,7 +119,8 @@ impl MemoryPlanner {
     fn allocate_naive(&mut self, program: &MirProgram) -> Result<()> {
         for func in &program.functions {
             for stmt in &func.body {
-                if let MirStmt::Assign { name, var_type, .. } = stmt {
+                if let MirStmt::Assign { name, .. } = stmt {
+                    let size = 4096; // Default size
                     let buffer_id = self.buffers.len();
                     self.buffers.push(size);
 
@@ -128,7 +129,7 @@ impl MemoryPlanner {
                         buffer_id,
                         offset: 0,
                         size,
-                        dtype: var_type.clone(),
+                        dtype: "f32".to_string(),
                     });
                 }
             }
@@ -302,15 +303,16 @@ impl MemoryPlanner {
         // Assign allocations
         for func in &program.functions {
             for stmt in &func.body {
-                if let MirStmt::Assign { name, var_type, .. } = stmt {
+                if let MirStmt::Assign { name, .. } = stmt {
                     if let Some(&color) = colors.get(name) {
+                        let size = 4096; // Default size
 
                         self.allocations.insert(name.clone(), BufferAllocation {
                             tensor_name: name.clone(),
                             buffer_id: color,
                             offset: 0,
                             size,
-                            dtype: var_type.clone(),
+                            dtype: "f32".to_string(),
                         });
 
                         // Update buffer size if needed
