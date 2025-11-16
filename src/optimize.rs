@@ -513,7 +513,7 @@ mod tests {
 
     #[test]
     fn test_dce() {
-        let mut program = MirProgram {
+        let mut program = MirProgram { models: vec![], 
             models: vec![],
             functions: vec![MirFunction {
                 name: "test".to_string(),

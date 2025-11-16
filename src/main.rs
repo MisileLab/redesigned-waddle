@@ -30,7 +30,7 @@ enum Commands {
         #[arg(short, long, value_name = "FILE")]
         output: Option<PathBuf>,
 
-        /// Backend to use (triton, cuda, rocm, llvm)
+        /// Backend to use (triton, cuda, rocm, llvm, webgpu)
         #[arg(short, long, default_value = "triton")]
         backend: String,
     },
@@ -129,9 +129,14 @@ fn compile_file(path: &PathBuf, output: Option<PathBuf>, backend: &str) -> lumen
             let mut codegen = lumen::codegen::LLVMCodegen::new();
             (codegen.generate(&mir_program)?, "ll")
         }
+        "webgpu" | "wgsl" => {
+            println!("🌐 Generating WebGPU WGSL code...");
+            let mut codegen = lumen::codegen::WebGPUCodegen::new();
+            (codegen.generate(&mir_program)?, "wgsl")
+        }
         _ => {
             return Err(lumen::LumenError::CodegenError {
-                message: format!("Unknown backend: {}. Use triton, cuda, rocm, or llvm", backend),
+                message: format!("Unknown backend: {}. Use triton, cuda, rocm, llvm, or webgpu", backend),
             });
         }
     };

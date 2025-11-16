@@ -483,7 +483,7 @@ mod tests {
 
     #[test]
     fn test_cuda_codegen() {
-        let program = MirProgram {
+        let program = MirProgram { models: vec![], 
             models: vec![],
             functions: vec![],
         };

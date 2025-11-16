@@ -214,7 +214,7 @@ mod tests {
     fn test_cost_model() {
         let cost_model = CostModel::new();
 
-        let program = MirProgram {
+        let program = MirProgram { models: vec![], 
             models: vec![],
             functions: vec![],
         };
@@ -226,7 +226,7 @@ mod tests {
     #[test]
     fn test_auto_scheduler() {
         let scheduler = AutoScheduler::new();
-        let program = MirProgram {
+        let program = MirProgram { models: vec![], 
             models: vec![],
             functions: vec![],
         };

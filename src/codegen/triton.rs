@@ -402,7 +402,7 @@ mod tests {
 
     #[test]
     fn test_triton_codegen() {
-        let program = MirProgram {
+        let program = MirProgram { models: vec![], 
             models: vec![],
             functions: vec![],
         };

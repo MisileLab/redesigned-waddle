@@ -16,6 +16,15 @@ pub mod mixed_precision;
 pub mod distributed;
 pub mod safetensors_support;
 
+// New advanced features
+pub mod graph_ir;
+pub mod dynamic_shapes;
+pub mod quantization;
+pub mod profiling;
+pub mod memory_planning;
+pub mod advanced_ops;
+pub mod benchmark;
+
 // Re-exports
 pub use ast::*;
 pub use parser::parse;
@@ -29,3 +38,12 @@ pub use schedule::{Schedule, AutoScheduler};
 pub use mixed_precision::{AMPConfig, MixedPrecisionOptimizer, Precision};
 pub use distributed::{DistributedConfig, Strategy, DeviceMesh};
 pub use safetensors_support::{SafetensorsExporter, SafetensorsImporter, ModelMetadata};
+
+// New advanced features
+pub use graph_ir::Graph;
+pub use dynamic_shapes::{SymbolicShape, DynamicShapeInference};
+pub use quantization::{QuantConfig, QuantizationScheme};
+pub use profiling::{Profiler, MemoryAnalyzer, Visualizer};
+pub use memory_planning::{MemoryPlanner, AllocationStrategy};
+pub use advanced_ops::AdvancedOpsLibrary;
+pub use benchmark::{BenchmarkSuite, BenchmarkConfig};
