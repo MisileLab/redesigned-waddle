@@ -4,11 +4,11 @@
 use crate::mir::*;
 use crate::hir::*;
 use crate::error::{Result, LumenError};
-use safetensors::tensor::{SafeTensors, TensorView, Dtype};
+use safetensors::tensor::{SafeTensors, Dtype};
 use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::{Write, Read};
+use std::io::Read;
 use std::path::Path;
 
 /// Model metadata for safetensors

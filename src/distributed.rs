@@ -1,8 +1,6 @@
 // Distributed Training Framework
 // Multi-GPU data parallelism, tensor parallelism, and pipeline parallelism
 
-use crate::mir::*;
-use crate::error::Result;
 use std::collections::HashMap;
 
 /// Distributed training strategy

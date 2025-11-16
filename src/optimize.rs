@@ -348,6 +348,7 @@ pub struct OperatorFusion {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 enum FusionPattern {
     /// Fuse: matmul + relu -> fused_linear_relu
     LinearReLU { matmul_var: String, relu_var: String },

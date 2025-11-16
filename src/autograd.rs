@@ -85,7 +85,7 @@ impl AutogradContext {
         self.forward_ops = forward_stmts.to_vec();
 
         // Initialize gradient of loss as 1.0
-        let loss_grad = self.get_grad_name(loss_var);
+        let _loss_grad = self.get_grad_name(loss_var);
 
         // Process forward operations in reverse order
         for stmt in forward_stmts.iter().rev() {
@@ -216,7 +216,7 @@ impl AutogradContext {
         Ok(())
     }
 
-    fn add_backward_for_binop(&mut self, op: &HirBinOp, left: &MirExpr, right: &MirExpr, output: &str, output_grad: &str) -> Result<()> {
+    fn add_backward_for_binop(&mut self, op: &HirBinOp, left: &MirExpr, right: &MirExpr, _output: &str, output_grad: &str) -> Result<()> {
         match op {
             HirBinOp::Add => {
                 // dL/dx = dL/dz, dL/dy = dL/dz

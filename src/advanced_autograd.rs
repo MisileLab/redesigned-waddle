@@ -3,7 +3,6 @@
 
 use crate::autograd::*;
 use crate::mir::*;
-use crate::hir::*;
 use crate::error::Result;
 
 /// Extended gradient computations for advanced operations

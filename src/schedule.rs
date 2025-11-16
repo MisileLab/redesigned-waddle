@@ -96,8 +96,8 @@ impl Schedule {
 
 /// Auto-scheduler that searches for optimal schedules
 pub struct AutoScheduler {
-    search_iterations: usize,
-    cost_model: CostModel,
+    _search_iterations: usize,
+    _cost_model: CostModel,
 }
 
 #[derive(Debug, Clone)]
@@ -152,8 +152,8 @@ impl CostModel {
 impl AutoScheduler {
     pub fn new() -> Self {
         Self {
-            search_iterations: 100,
-            cost_model: CostModel::new(),
+            _search_iterations: 100,
+            _cost_model: CostModel::new(),
         }
     }
 

@@ -2,7 +2,6 @@
 // FP16, BF16, and automatic mixed precision
 
 use crate::mir::*;
-use crate::hir::*;
 use crate::error::Result;
 use std::collections::HashMap;
 
@@ -126,7 +125,7 @@ pub struct MixedPrecisionOptimizer {
     config: AMPConfig,
     loss_scale: f32,
     growth_tracker: usize,
-    master_params: HashMap<String, String>,  // param_name -> master_copy_name
+    _master_params: HashMap<String, String>,  // param_name -> master_copy_name
 }
 
 impl MixedPrecisionOptimizer {
@@ -135,7 +134,7 @@ impl MixedPrecisionOptimizer {
             loss_scale: config.init_scale,
             config,
             growth_tracker: 0,
-            master_params: HashMap::new(),
+            _master_params: HashMap::new(),
         }
     }
 
@@ -276,12 +275,12 @@ impl PrecisionAnalyzer {
 
 /// Cast insertion pass - adds explicit casts between precisions
 pub struct CastInsertion {
-    casts: Vec<(String, Precision, Precision)>,  // (var, from, to)
+    _casts: Vec<(String, Precision, Precision)>,  // (var, from, to)
 }
 
 impl CastInsertion {
     pub fn new() -> Self {
-        Self { casts: Vec::new() }
+        Self { _casts: Vec::new() }
     }
 
     /// Insert casts where precision changes
@@ -293,7 +292,7 @@ impl CastInsertion {
     }
 
     /// Generate cast operation
-    pub fn generate_cast(&self, var: &str, from: Precision, to: Precision) -> String {
+    pub fn generate_cast(&self, var: &str, _from: Precision, to: Precision) -> String {
         format!("{} = {}.to({})", var, var, to.to_torch_dtype())
     }
 }

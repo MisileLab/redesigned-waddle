@@ -8,7 +8,7 @@ use std::fmt::Write;
 pub struct CudaCodegen {
     output: String,
     indent_level: usize,
-    kernel_counter: usize,
+    _kernel_counter: usize,
 }
 
 impl CudaCodegen {
@@ -16,7 +16,7 @@ impl CudaCodegen {
         Self {
             output: String::new(),
             indent_level: 0,
-            kernel_counter: 0,
+            _kernel_counter: 0,
         }
     }
 

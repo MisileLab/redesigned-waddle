@@ -178,7 +178,7 @@ impl TypeChecker {
                 if let Symbol::Model { methods, params, .. } = self.context.symbol_table.get(symbol_id) {
                     // Check if field is a method
                     for &method_id in methods {
-                        if let Symbol::Function { name, params, return_type, .. } =
+                        if let Symbol::Function { name, return_type, .. } =
                             self.context.symbol_table.get(method_id) {
                             if name == field {
                                 // Return function type (simplified)
