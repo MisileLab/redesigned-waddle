@@ -30,8 +30,8 @@ enum Commands {
         #[arg(short, long, value_name = "FILE")]
         output: Option<PathBuf>,
 
-        /// Backend to use (pytorch, triton, cuda)
-        #[arg(short, long, default_value = "pytorch")]
+        /// Backend to use (triton, cuda, rocm, llvm)
+        #[arg(short, long, default_value = "triton")]
         backend: String,
     },
 }
@@ -109,11 +109,6 @@ fn compile_file(path: &PathBuf, output: Option<PathBuf>, backend: &str) -> lumen
 
     // Generate code based on selected backend
     let (generated_code, default_extension) = match backend.to_lowercase().as_str() {
-        "pytorch" => {
-            println!("🐍 Generating PyTorch code...");
-            let mut codegen = lumen::codegen::PyTorchCodegen::new();
-            (codegen.generate(&mir_program)?, "py")
-        }
         "triton" => {
             println!("⚡ Generating Triton GPU kernels...");
             let mut codegen = lumen::codegen::TritonCodegen::new();
@@ -129,9 +124,14 @@ fn compile_file(path: &PathBuf, output: Option<PathBuf>, backend: &str) -> lumen
             let mut codegen = lumen::codegen::RocmCodegen::new();
             (codegen.generate(&mir_program)?, "cpp")
         }
+        "llvm" => {
+            println!("🔧 Generating LLVM IR...");
+            let mut codegen = lumen::codegen::LLVMCodegen::new();
+            (codegen.generate(&mir_program)?, "ll")
+        }
         _ => {
             return Err(lumen::LumenError::CodegenError {
-                message: format!("Unknown backend: {}. Use pytorch, triton, cuda, or rocm", backend),
+                message: format!("Unknown backend: {}. Use triton, cuda, rocm, or llvm", backend),
             });
         }
     };

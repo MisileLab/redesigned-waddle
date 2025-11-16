@@ -72,9 +72,6 @@ fn train_step(model: MLP,
 ### Compile and Run
 
 ```bash
-# Compile to PyTorch (CPU)
-lumenc compile mlp.lumen --backend pytorch -o mlp.py
-
 # Compile to Triton (GPU kernels)
 lumenc compile mlp.lumen --backend triton -o mlp.py
 
@@ -88,7 +85,7 @@ lumenc compile mlp.lumen --backend rocm -o mlp.cpp
 lumenc compile mlp.lumen --backend llvm -o mlp.ll
 
 # Run the generated code
-python mlp.py  # For PyTorch/Triton backends
+python mlp.py  # For Triton backend
 ```
 
 ---
@@ -107,31 +104,25 @@ python mlp.py  # For PyTorch/Triton backends
 
 ### Code Generation Backends ✅
 
-#### 1. **PyTorch Backend**
-- Pure Python code generation
-- Full PyTorch API integration
-- CPU and GPU execution
-- Ideal for prototyping and debugging
-
-#### 2. **Triton Backend**
+#### 1. **Triton Backend**
 - Optimized GPU kernel generation
 - 128×128×32 tiled matrix multiplication
 - Automatic memory management
 - Works on NVIDIA and AMD GPUs
 
-#### 3. **CUDA Backend**
+#### 2. **CUDA Backend**
 - Native CUDA C++ code generation
 - 32×32 tiled kernels with shared memory
 - Direct cuBLAS integration
 - Maximum NVIDIA GPU performance
 
-#### 4. **ROCm/HIP Backend**
+#### 3. **ROCm/HIP Backend**
 - Native AMD GPU support
 - HIP API for portable GPU code
 - Identical performance to CUDA
 - hipBLAS integration
 
-#### 5. **LLVM Backend**
+#### 4. **LLVM Backend**
 - Native CPU code generation
 - No Python dependency
 - AOT compilation to machine code
@@ -297,15 +288,15 @@ Lumen aims to match or exceed PyTorch performance:
 │ Optimization │ (DCE, CSE, Fusion, etc.)
 └──────┬───────┘
        ↓
-   ┌───┴────┬──────┬──────┬──────┐
-   ↓        ↓      ↓      ↓      ↓
-┌─────┐ ┌──────┐ ┌────┐ ┌────┐ ┌────┐
-│PyTorch│Triton│ CUDA│ ROCm│ LLVM│
-└─────┘ └──────┘ └────┘ └────┘ └────┘
-   ↓        ↓      ↓      ↓      ↓
-┌─────┐ ┌──────┐ ┌────┐ ┌────┐ ┌────┐
-│ .py │ │ .py  │ │.cu │ │.cpp│ │.ll │
-└─────┘ └──────┘ └────┘ └────┘ └────┘
+   ┌───┴────┬──────┬──────┐
+   ↓        ↓      ↓      ↓
+┌──────┐ ┌────┐ ┌────┐ ┌────┐
+│Triton│ │CUDA│ │ROCm│ │LLVM│
+└──────┘ └────┘ └────┘ └────┘
+   ↓        ↓      ↓      ↓
+┌──────┐ ┌────┐ ┌────┐ ┌────┐
+│ .py  │ │.cu │ │.cpp│ │.ll │
+└──────┘ └────┘ └────┘ └────┘
 ```
 
 ---
@@ -331,7 +322,6 @@ lumen/
 │   ├── distributed.rs         # Multi-GPU training
 │   ├── safetensors_support.rs # Model serialization
 │   ├── codegen/               # Code generation backends
-│   │   ├── pytorch.rs         # PyTorch backend
 │   │   ├── triton.rs          # Triton GPU kernels
 │   │   ├── cuda.rs            # CUDA backend
 │   │   ├── rocm.rs            # ROCm/HIP backend
@@ -342,7 +332,7 @@ lumen/
 ├── examples/                  # Example Lumen programs
 │   ├── standalone.lumen       # Simple function example
 │   ├── mlp_standalone.lumen   # MLP example
-│   ├── *.py                   # Generated PyTorch/Triton code
+│   ├── *.py                   # Generated Triton code
 │   ├── *.cu                   # Generated CUDA code
 │   └── *.cpp                  # Generated ROCm code
 ├── LANGUAGE_SPEC.md           # Complete language specification
@@ -402,7 +392,7 @@ See [ROADMAP.md](ROADMAP.md) for:
 ### ✅ Completed (v0.1-0.6, v0.7-0.9, v1.0, v1.2-1.4)
 
 - Core compiler infrastructure
-- 5 code generation backends
+- 4 code generation backends
 - Automatic differentiation for 30+ operations
 - Optimization passes (DCE, CSE, fusion, etc.)
 - LLVM native backend
